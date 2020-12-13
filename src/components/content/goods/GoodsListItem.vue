@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item">
-    <img :src="goodsItem.show.img" alt="">
+    <img :src="goodsItem.show.img" alt="" @load="imageLoad">
     <div class="goods-info">
       <p>{{goodsItem.title}}</p>
       <span class="price">{{goodsItem.sprice}}</span>
@@ -11,7 +11,7 @@
 
 <script>
 export default {
-name: "GoodsListItem",
+  name: "GoodsListItem",
   props:{
   goodsItem:{
     type:Object,
@@ -19,6 +19,12 @@ name: "GoodsListItem",
       return {}
     }
   }
+  },
+  methods:{
+    imageLoad(){
+      //使用事件总线发射事件给scroll组件
+      this.$bus.$emit('itemImageLoad')
+    }
   }
 }
 </script>

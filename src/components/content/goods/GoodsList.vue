@@ -1,10 +1,9 @@
 <template>
   <div class="goods">
-    <goods-list-item v-for="item in goods"
+    <goods-list-item v-for="(item,index) in goods"
                      :goods-item="item"
-                      v-bind:key="item.iid">
+                      v-bind:key="index">
     </goods-list-item>
-
   </div>
 </template>
 

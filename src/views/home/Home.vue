@@ -5,7 +5,10 @@
       <div slot="center">购物街</div>
     </nav-bar>
 
-    <scroll class="content" ref="scroll" :probe-type="3" @scrol="contentScroll">
+    <scroll class="content" ref="scroll" :probe-type="3"
+            @scroll="contentScroll"
+            :pull-up-load="true"
+            @pullingUp="loadMore">
       <!--    轮播图-->
       <home-swiper :banners="banners"></home-swiper>
 
@@ -72,10 +75,6 @@ import GoodsList from "../../components/content/goods/GoodsList";
 import Scroll from "../../components/common/scroll/Scroll";
 import BackTop from "../../components/content/backTop/BackTop";
 
-
-
-
-
 export default {
   name: "Home",
   components:{
@@ -114,6 +113,11 @@ export default {
     this.getHomeGoods('pop')
     this.getHomeGoods('sell')
     this.getHomeGoods('new')
+
+    //监听item图片加载完成(goodsslistitem组件中发射出的事件总线)
+    this.$bus.$on('itemImageLoad',()=>{
+          this.$refs.scroll.scroll.refresh()
+    })
   },
   methods:{
     //事件监听相关方法
@@ -138,9 +142,17 @@ export default {
     },
 
     contentScroll(position){
-      console.log(position)
-      this.isShowBackTop = (-position.y) > 20
+     // console.log(position)
+     //  this.isShowBackTop = (-position.y) > 1000
 
+      this.isShowBackTop = (-position.y) > 1000
+    },
+
+    //上拉加载更多
+    loadMore(){
+      console.log(223);
+      this.getHomeGoods(this.currentType)
+      this.$refs.scroll.scroll.refresh()
     },
 
     //网络请求相关方法
@@ -159,6 +171,7 @@ export default {
 
         this.goods[type].list.push(...res.data.list)
         this.goods[type].page+1
+
       })
     }
 
