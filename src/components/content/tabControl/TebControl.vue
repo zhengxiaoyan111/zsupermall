@@ -30,6 +30,7 @@ export default {
     itemClick(index){
      // console.log(index);
       this.currentIndex=index
+      this.$emit('tabClick',index)
     }
   }
 }
@@ -40,6 +41,7 @@ export default {
   display: flex;
   text-align: center;
   font-size: 15px;
+  background-color: #fff;
 }
 .teb-control-item{
   flex: 1;
