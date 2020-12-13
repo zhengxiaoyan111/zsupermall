@@ -1,6 +1,6 @@
 <template>
   <swiper>
-    <swiper-item v-for="item in banners" v-bind:key="item">
+    <swiper-item v-for="item in banners" v-bind:key="item.title">
       <a :href="item.link">
         <img :src="item.image" alt=""/>
       </a>
@@ -9,14 +9,9 @@
 </template>
 
 <script>
-
-
 import Swiper from "../../../components/common/swiper/Swiper";
 import SwiperItem from "../../../components/common/swiper/SwiperItem";
-// import Swiper from "components/common/swiper";
-// import SwiperItem from "components/common/swiper";
-// import Swiper from "../../components/common/swiper/Swiper";
-// import SwiperItem from "../../components/common/swiper/SwiperItem";
+
 export default {
 name: "HomeSwiper",
   props:{
