@@ -5,20 +5,21 @@
       <div slot="center">购物街</div>
     </nav-bar>
 
-  <!--    轮播图-->
-    <home-swiper :banners="banners"></home-swiper>
+    <scroll class="content" ref="scroll" :probe-type="3" @scrol="contentScroll">
+      <!--    轮播图-->
+      <home-swiper :banners="banners"></home-swiper>
 
-    <recommend-view :recommends="recommends"></recommend-view>
+      <recommend-view :recommends="recommends"></recommend-view>
 
-    <feature-view></feature-view>
+      <feature-view></feature-view>
 
-    <teb-control :titles="['流行','新款','精选']"
-                 class="tab-control"
-                 @tabClick="tabClick" >
+      <teb-control :titles="['流行','新款','精选']"
+                   class="tab-control"
+                   @tabClick="tabClick">
+      </teb-control>
 
-    </teb-control>
+      <goods-list :goods="showGoods"></goods-list>
 
-    <goods-list :goods="goods['pop'].list"></goods-list>
 
     <ul>
       <li>1</li>
@@ -52,7 +53,8 @@
       <li>1</li>
       <li>1</li>
     </ul>
-
+    </scroll>
+    <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
   </div>
 </template>
 
@@ -67,6 +69,12 @@ import {getHomeGoods} from "../../network/home";
 import TebControl from "../../components/content/tabControl/TebControl";
 import GoodsList from "../../components/content/goods/GoodsList";
 
+import Scroll from "../../components/common/scroll/Scroll";
+import BackTop from "../../components/content/backTop/BackTop";
+
+
+
+
 
 export default {
   name: "Home",
@@ -76,7 +84,9 @@ export default {
     RecommendView,
     FeatureView,
     TebControl,
-    GoodsList
+    GoodsList,
+    Scroll,
+    BackTop
   },
   data(){
     return{
@@ -87,7 +97,14 @@ export default {
         'pop':{page:0,list:[]},
         'new':{page:0,list:[]},
         'sell':{page:0,list:[]},
-      }
+      },
+      currentType:'pop',
+      isShowBackTop:false
+    }
+  },
+  computed:{
+    showGoods(){
+      return this.goods[this.currentType].list
     }
   },
   created() {
@@ -101,8 +118,31 @@ export default {
   methods:{
     //事件监听相关方法
     tabClick(index){
-      console.log(index);
+      //console.log(index);
+      switch(index){
+        case 0:
+          this.currentType='pop'
+          break
+        case 1:
+          this.currentType='new'
+          break
+        case 2:
+          this.currentType='sell'
+          break
+      }
     },
+
+    //点击图标回到顶部
+    backClick(){
+      this.$refs.scroll.scrollTo(0,0,300)
+    },
+
+    contentScroll(position){
+      console.log(position)
+      this.isShowBackTop = (-position.y) > 20
+
+    },
+
     //网络请求相关方法
     getHomeMultidata(){
     getHomeMultidata().then(res=>{
@@ -123,7 +163,6 @@ export default {
     }
 
   }
-
 
 }
 </script>
@@ -147,5 +186,19 @@ export default {
   position: sticky;
   top: 44px;
 }
+/*.content{*/
+/*  height: calc(100% - 93px);*/
+/*  overflow: hidden;*/
+/*  !*margin-top: 50px;*!*/
+/*}*/
 
+.content {
+  overflow: hidden;
+
+  position: absolute;
+  top: 44px;
+  bottom: 49px;
+  left: 0;
+  right: 0;
+}
 </style>

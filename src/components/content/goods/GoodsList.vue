@@ -2,7 +2,7 @@
   <div class="goods">
     <goods-list-item v-for="item in goods"
                      :goods-item="item"
-                      v-bind:key="item.cfav">
+                      v-bind:key="item.iid">
     </goods-list-item>
 
   </div>
